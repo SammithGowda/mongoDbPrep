@@ -5,17 +5,26 @@ const { getDB } = require("../connection");
 const createUser = async(req,res)=>{
     const data = req.body;
     try {
-        console.log(data,"req data")
-        const db= getDB()
-        const user = await db.collection("User").insertOne(data)
-    
+
+        // const db= getDB()
+        // const user = await db.collection("User").insertOne(data)
+        const user = await User.create(data)
         res.status(201).send({mes:"Successfull",data:user})
-    
-        
     } catch (error) {
         console.log(error)
         res.status(505).send("Internal Server Error")
     }
 }
+const getUser = async(req,res)=>{
+    try {
+        const user = await User.find()
+        res.status(200).send({success:true,data:user})
+    } catch (error) {
+        res.status(505).send({
+            success: false,
+            message: "Internal server error"
+          })
+    }
+}
 
-module.exports = createUser
+module.exports = {createUser,getUser}
