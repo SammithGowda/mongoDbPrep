@@ -14,7 +14,7 @@ const User = new mongoose.Schema(
       zip: String,
       country: String,
     },
-    role: { type: String, enum: ["customer", "admin"], default: "customer" },
+    role: { type: String, enum: ["customer", "admin"], default: "customer " },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
