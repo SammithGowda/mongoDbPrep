@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 // app.use(express.json())
 // app.use(express.urlencoded({extended:true}))
 const createUser = require('./router/userRoute');
+const cretaTranscation = require('./router/transcationRoute');
 const {connectDB,connectMongoosDb} = require("./connection");
 const metaData =[
     {name:"sammith",age:20,cast:"Hindu"},
@@ -29,6 +30,7 @@ app.use("/create",async(req,res)=>{
 })
 
 app.use('/users',createUser)
+app.use('/transcation',cretaTranscation)
 
 // connectDB()
 connectMongoosDb()
