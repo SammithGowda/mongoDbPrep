@@ -18,17 +18,17 @@ const createTracnscation = async(req,res)=>{
 const getTranscation = async(req,res)=>{
     try {
         //find the failed payment 
-        // const allTransaction = await Transaction.find({"status":"completed"})
+        const allTransaction = await Transaction.find()
 
         /* 
         here this is called aggretation is process and analyze data in collection by passing it through
         a series  of stage called pipline
         */
-        const allTransaction = await Transaction.aggregate([
-            {$match:{type:"deposit",status:"completed"}},
-            {$group:{_id:"$userId",totamn:{$sum:"$amount"}}},
-            {$sort:{totamn:-1}},
-        ]);
+        // const allTransaction = await Transaction.aggregate([
+        //     {$match:{type:"deposit",status:"completed"}},
+        //     {$group:{_id:"$userId",totamn:{$sum:"$amount"}}},
+        //     {$sort:{totamn:-1}},
+        // ]);
         res.status(200).send({success:true,data:allTransaction})
     } catch (error) {
         res.status(505).send({

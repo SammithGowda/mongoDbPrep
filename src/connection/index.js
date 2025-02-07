@@ -1,7 +1,9 @@
 
+require("dotenv").config()
 const {MongoClient} = require('mongodb')
 const mongoose = require("mongoose")
-const connectionUrl="mongodb+srv://sammithdgowda:Sammith%40123@mongodbprep.kcas8.mongodb.net/?retryWrites=true&w=majority&appName=MongoDbPrep";
+
+const connectionUrl=process.env.connectionUrl;
 const client = new MongoClient(connectionUrl)
 let db
 async function connectDB() {

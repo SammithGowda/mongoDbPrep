@@ -27,7 +27,7 @@ const getUser = async(req,res)=>{
     }
 }
 
-const updateUser = async(req,res)=>{
+const updateUser = async(req,res)=> {
     const data = req.body.email
     try {
         const user = await User.updateOne({
@@ -46,4 +46,20 @@ const updateUser = async(req,res)=>{
     }
 }
 
-module.exports = {createUser,getUser,updateUser}
+const deleteUser = async(req,res)=> {
+    const userId = req.params.userId    
+    try {
+        const user = await User.findOne({_id:userId}) //userId must {}
+        const name =user.name
+        if(!user) throw Error("No user Found!")
+        await User.findByIdAndDelete({_id:userId})
+        res.status(200).send({success:true,data:`${name} User deleted successfully`})
+    } catch (error) {
+        res.status(505).send({
+            success: false,
+            message: error.message
+          })
+    }
+}
+
+module.exports = {createUser,getUser,updateUser,deleteUser}
