@@ -27,4 +27,23 @@ const getUser = async(req,res)=>{
     }
 }
 
-module.exports = {createUser,getUser}
+const updateUser = async(req,res)=>{
+    const data = req.body.email
+    try {
+        const user = await User.updateOne({
+            name:"Samm"
+        },{
+            $set:{'email':data}
+        })
+        res.status(200).send({success:true,data:user})
+    } catch (error) {
+        console.log(error);
+        
+        res.status(505).send({
+            success: false,
+            message: "Internal server error"
+          })
+    }
+}
+
+module.exports = {createUser,getUser,updateUser}
