@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 const createUser = require('./router/userRoute');
 const cretaTranscation = require('./router/transcationRoute');
 const branch = require("./router/branchRoute")
+const accounts = require("./router/accountRoute")
 const {connectDB,connectMongoosDb} = require("./connection");
 const metaData =[
     {name:"sammith",age:20,cast:"Hindu"},
@@ -33,6 +34,7 @@ app.use("/create",async(req,res)=>{
 app.use('/users',createUser)
 app.use('/transcation',cretaTranscation)
 app.use('/branch',branch)
+app.use('/accounts',accounts)
 
 // connectDB()
 connectMongoosDb()
