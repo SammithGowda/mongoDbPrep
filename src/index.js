@@ -2,7 +2,8 @@ const express =  require("express");
 const connectDataBase = require("./connection");
 const bodyParser = require("body-parser")
 const app = express();
-
+const cors = require("cors")
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 //both are used to parse the incommig data and put it in req.body obj
@@ -31,11 +32,22 @@ app.use("/create",async(req,res)=>{
     res.status(201).send({mes:"created",user:result})
 })
 
+const middleWare = (req,res,next) =>{
+    console.log(req.headers.authorization.split(" ")[1])
+    next()
+}
+const erroHandler =(err,req,res,next)=>{
+    console.log(err)
+    res.status(err.status || 500).json({success:false,message:err.message||"Internal Server Error"})
+}
+app.use("/test",middleWare,(req,res)=>{
+    return res.send({message:true,data:"Hey Hi"})
+})
 app.use('/users',createUser)
 app.use('/transcation',cretaTranscation)
 app.use('/branch',branch)
 app.use('/accounts',accounts)
-
+app.use(erroHandler)
 // connectDB()
 connectMongoosDb()
 const PORT =3001;
