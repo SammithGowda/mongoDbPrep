@@ -16,7 +16,7 @@ const createAccount = async(req,res)=>{
 const getAccount = async(req,res)=>{
     try {
         debugger
-        // const account = await Account.find()
+        // const account = await Account.find().populate("userId")
         //belwo is the aggregation look up for populating data 
         const account = await Account.aggregate([
             {

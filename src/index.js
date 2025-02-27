@@ -16,7 +16,8 @@ const cretaTranscation = require('./router/transcationRoute');
 const branch = require("./router/branchRoute")
 const accounts = require("./router/accountRoute")
 const todo = require("./router/todoRouter")
-const {connectDB,connectMongoosDb} = require("./connection");
+const station = require("./router/stationRoute")
+const {connectMongoosDb} = require("./connection");
 
 // app.use("/create",async(req,res)=>{
 //     const db = await connectDataBase();
@@ -51,11 +52,13 @@ app.use('/users',createUser)
 app.use('/transcation',cretaTranscation)
 app.use('/branch',rbacMiddleware(["admin"]),branch)
 app.use('/accounts',accounts)
+app.use('/station',station)
 app.use(erroHandler)
 // connectDB()
 connectMongoosDb()
 const PORT =3001;
 const users =[] //mock DB
+
 app.post('/signup',async(req,res)=>{
     const {userName,email,password,role} = req.body
     if(!userName||!email||!password||!role)  return res.status(400).json({ msg: "All fields required" });
@@ -98,6 +101,7 @@ const authorised =(...roleBased) =>{
         next()
     }
 }
+
 app.get('/dashboard',authenticateToken,(req,res)=>{
     return res.status(201).json({message:"helo this the dashboard"})
 })
@@ -109,10 +113,6 @@ app.get('/admin',authenticateToken,authorised("admin"),(req,res)=>{
 app.get('/user',authenticateToken,authorised('admin',"user"),(req,res)=>{
     return res.status(201).json({message:"hello this the user"})
 })
-
-
-
-
 
 
 
