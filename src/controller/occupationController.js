@@ -29,14 +29,30 @@ const getOccupation = async(req,res)=>{
     try {
         // const user = await Occupation.find({},{name:1,occupation:1,_id:0}).sort({name:1})
         const user = await Occupation.aggregate([
-            {$project:{name:1,occupation:1,_id:0}},
-            {$sort:{name:1}}
+            {$project:{_id:0,nameAndOccup:{$concat:["$name","(",{$substrCP:["$occupation",0,1]},")"]}}},
+            {$sort:{nameAndOccup:1}}
         ])
         res.status(200).send({success:"Success",data:user})
     } catch (error) {
         res.status(505).send({
             success: false,
-            message: error
+            message: error.message
+          })
+    }
+}
+
+const getOccupationCount = async(req,res)=>{
+    try {
+        
+        const user = await Occupation.aggregate([
+            {$group:{_id:"$occupation",count:{"$sum":1}}},
+            {$sort:{count:1,_id:1}}
+        ])
+        res.status(200).send({success:"Success",data:user})
+    } catch (error) {
+        res.status(505).send({
+            success: false,
+            message: error.message
           })
     }
 }
@@ -45,4 +61,4 @@ const getOccupation = async(req,res)=>{
 
 
 
-module.exports = {createOccupation,getOccupation}
+module.exports = {createOccupation,getOccupation,getOccupationCount}
