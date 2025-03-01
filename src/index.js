@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const {redisClient,requestLimit,cachedData} = require("./redis")
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
@@ -81,7 +82,7 @@ app.get("/login",async(req,res)=>{
 })
 
 const authenticateToken = async(req,res,next)=>{
-    const token = req.headers["authorization"].split(" ")[1]
+    const token = req.headers["authorization"]?.split(" ")[1]
     if(!token) return res.status(404).json({ msg: "Not Authorized Access denied"  });
     
     jwt.verify(token,"sammith",(err,user)=>{
@@ -93,8 +94,6 @@ const authenticateToken = async(req,res,next)=>{
 
 const authorised =(...roleBased) =>{
     return(req,res,next)=>{
-        console.log(roleBased)
-        console.log(req.user.role)
         if(!roleBased.includes(req?.user?.role)){
             return res.status(403).json({message:"Access denied: insufficient role"})
         }
@@ -102,22 +101,35 @@ const authorised =(...roleBased) =>{
     }
 }
 
+
+
 app.get('/dashboard',authenticateToken,(req,res)=>{
     return res.status(201).json({message:"helo this the dashboard"})
 })
 app.get('/admin',authenticateToken,authorised("admin"),(req,res)=>{
     console.log(req.body)
     console.log(req.user)
-    return res.status(201).json({message:"helo this the admin"})
-})
-app.get('/user',authenticateToken,authorised('admin',"user"),(req,res)=>{
-    return res.status(201).json({message:"hello this the user"})
+    return res.status(201).json({message:"helo this the admin"})    
 })
 
+app.get('/user',authenticateToken,authorised('admin',"user"),requestLimit(30,4),cachedData,async(req,res)=>{
+
+        let data = {name:"samm",age:20}
+
+        await redisClient.setEx("cachedData",60,JSON.stringify(data))
+        
+    return res.status(201).json({message:"hello this the user",source:`db you have ${req.attempt} left`})
+})
 
 
 
+redisClient
+  .connect()
+  .then(() => console.log("Connected to Redis"))
+  .catch((err) => {
+    console.error(" Redis connection error:", err);
+    process.exit(1); // Exit the app if Redis fails
+  });
 app.listen(PORT,()=>{
     console.log(`App runnig on port ${PORT}`);
-    
 })
