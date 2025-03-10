@@ -55,7 +55,12 @@ const getAccount = async(req,res)=>{
 const deleteAccount = async(req,res)=> {
     const userId = req.params.userId    
     try {
-        
+        const user = await Account.find({userId:"67a4c47ca574ea224b4bc413",accountType:"Business"}).explain("executionStats")
+        // console.log(user)
+        res.status(505).send({
+            success: false,
+            message: "explain"
+          })
     } catch (error) {
         res.status(505).send({
             success: false,
