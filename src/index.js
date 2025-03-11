@@ -18,6 +18,7 @@ const branch = require("./router/branchRoute")
 const accounts = require("./router/accountRoute")
 const todo = require("./router/todoRouter")
 const station = require("./router/stationRoute")
+const test = require("./router/testRoute")
 const {connectMongoosDb} = require("./connection");
 
 // app.use("/create",async(req,res)=>{
@@ -54,6 +55,7 @@ app.use('/transcation',cretaTranscation)
 app.use('/branch',rbacMiddleware(["admin"]),branch)
 app.use('/accounts',accounts)
 app.use('/station',station)
+app.use('/test',test)
 app.use(erroHandler)
 // connectDB()
 connectMongoosDb()

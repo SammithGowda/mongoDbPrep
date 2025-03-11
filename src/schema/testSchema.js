@@ -1,8 +1,8 @@
 const mongoose = require("mongoose")
 
-const todo = new mongoose.Schema({
-    title:{type:String,required:true},
-    date:{type:Date,required:true,default:Date.now()}
+const mark = new mongoose.Schema({
+    name:{type:String,required:true},
+    marks:{type:Number,required:true,}
 })
 
-module.exports = mongoose.model("TODO",todo)
+module.exports = mongoose.model("Mark",mark)
