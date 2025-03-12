@@ -59,7 +59,7 @@ app.use('/station',station)
 app.use('/test',test)
 app.use(erroHandler)
 // connectDB()
-connectMongoosDb()
+
 const PORT =3001;
 const users =[] //mock DB
 
@@ -124,7 +124,11 @@ app.get('/user',authenticateToken,authorised('admin',"user"),requestLimit(30,4),
     return res.status(201).json({message:"hello this the user",source:`db you have ${req.attempt} left`})
 })
 
-
+try {
+    connectMongoosDb()
+} catch (error) {
+    
+}
 
 redisClient
   .connect()

@@ -69,6 +69,68 @@ const deleteAccount = async(req,res)=> {
     }
 }
 
+// Finds all employees who have a salary greater than 80,000.
+// Groups them by department and calculates the average salary in each department.
+// Sorts the results in descending order by the average salary.
+// {
+//   "_id": ObjectId("..."),
+//   "name": "John Doe",
+//   "position": "Software Engineer",
+//   "salary": 90000,
+//   "department": "Engineering",
+//   "dateOfJoining": ISODate("2020-06-15")
+// }
+// {
+//   "_id": ObjectId("..."),
+//   "name": "John Doe",
+//   "position": "Software Engineer",
+//   "salary": 95000,
+//   "department": "Engineering",
+//   "dateOfJoining": ISODate("2020-06-15")
+// }
+// {
+//   "_id": ObjectId("..."),
+//   "name": "John Doe",
+//   "position": "Software Engineer",
+//   "salary": 82000,
+//   "department": "Engineering",
+//   "dateOfJoining": ISODate("2020-06-15")
+// }
 
+async function exampleOne(params) {
+    const data = await Account.aggregate([
+        {$match:{salary:{$gt:80000}}},
+        {$group:{_id:"$department",avg:{$avg:"$salary"}}},
+        {$sort:{avg:-1}}
+    ])
+}
+
+// Find the total sales (total quantity * price) for each product.
+// Group the sales by product and calculate the total sales for each product across all regions.
+// Sort the results by total sales in descending order.
+// {
+//     "_id": ObjectId("..."),
+//     "product": "Laptop",
+//     "quantity": 15,
+//     "price": 1000,
+//     "saleDate": ISODate("2025-02-15"),
+//     "region": "North"
+//   },
+// {
+    //     "_id": ObjectId("..."),
+    //     "product": "Mobile",
+    //     "quantity": 15,
+    //     "price": 1000,
+    //     "saleDate": ISODate("2025-02-15"),
+    //     "region": "North"
+    //   }
+
+async function functionTwo(){
+    const data = Account.aggregate([
+        {$project:{_id:0,product:1,totalSale:{$multiply:["quantity","price"]}}},
+        {$group:{_id:"$product",regionSale:{$sum:"$totalSale"}}},
+        {$sort:{regionSale:-1}}
+    ])
+}
 
 module.exports = {createAccount,getAccount,deleteAccount}

@@ -4,6 +4,9 @@ const {MongoClient} = require('mongodb')
 const mongoose = require("mongoose")
 
 const connectionUrl=process.env.connectionUrl;
+if(!connectionUrl) {
+    return
+}
 const client = new MongoClient(connectionUrl)
 let db
 async function connectDB() {
@@ -30,6 +33,7 @@ async function connectMongoosDb(params) {
         console.log("Connected to MongoDB successfully",connection.connection.host);
     } catch (error) {
         console.error("MongoDB connection error:", error);
+        throw error
         
     }
 }
