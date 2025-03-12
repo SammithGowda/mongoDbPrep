@@ -9,6 +9,7 @@ const {redisClient,requestLimit,cachedData} = require("./redis")
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+
 //both are used to parse the incommig data and put it in req.body obj
 // app.use(express.json())
 // app.use(express.urlencoded({extended:true}))
