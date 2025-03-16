@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const Marks = require("../schema/testSchema");
-
+const City = require("../schema/geoSpatila")
 const create = async(req,res)=>{
     const DATA = [
         { "name": "Alice", "marks": 85 },
@@ -54,6 +54,17 @@ const deletE = async(req,res)=> {
     }
 }
 
+const addCityName = async (req,res) => {
+    try {
+        const data  = req.body
+        const result = await City.create(data)
+        res.status(200).send({success:"Successfully Saved ",data:result})
+    } catch (error) {
+        res.status(505).send({
+            success: false,
+            message: error.message
+          })  
+    }
+}
 
-
-module.exports = {create,get,deletE}
+module.exports = {create,get,deletE,addCityName}

@@ -13,6 +13,8 @@ const createAccount = async(req,res)=>{
         res.status(505).send("Internal Server Error")
     }
 }
+
+
 const getAccount = async(req,res)=>{
     try {
         debugger
