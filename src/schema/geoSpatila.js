@@ -29,7 +29,10 @@ const city = new mongoose.Schema({
     },
     geometrie:{
         type:[
-            {type:{type:String,enum:["Point","Polygon","MultiPoint"],required:true},coordinate:{type:Array,required:true}}
+            {
+                type:{type:String,enum:["Point","Polygon","MultiPoint"],required:true},
+                coordinate:{type:Array,required:true}
+            }
         ],
         required:function (params) {
             return this.type=="Geometrycollection";

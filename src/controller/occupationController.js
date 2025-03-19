@@ -48,6 +48,7 @@ const getOccupationCount = async(req,res)=>{
             {$group:{_id:"$occupation",count:{"$sum":1}}},
             {$sort:{count:1,_id:1}}
         ])
+
         res.status(200).send({success:"Success",data:user})
     } catch (error) {
         res.status(505).send({
@@ -57,6 +58,29 @@ const getOccupationCount = async(req,res)=>{
     }
 }
 
+const getOccupationBysortName = async(req,res)=>{
+    try {
+
+        const user = await Occupation.aggregate([
+            {$sort:{name:1}},
+            {$group:{_id:"$occupation",user:{
+                $push:{
+                    name:"$name"
+                }
+            },
+        }},
+            {$project:{_id:0,user:1}},
+           
+
+        ]);
+        res.status(200).send({success:"Success",data:user})
+    } catch (error) {
+        res.status(505).send({
+            success: false,
+            message: error.message
+          })
+    }
+}
 
 
 
